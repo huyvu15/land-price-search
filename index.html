@@ -12,13 +12,18 @@
 </head>
 <body>
 
+    <!-- Top Right Nav -->
+    <nav class="top-nav">
+        <a href="nghi-quyet.html" target="_blank">Nghị Quyết</a>
+        <a href="lien-he.html">Liên Hệ</a>
+    </nav>
+
     <div class="main-container">
         
         <header class="app-header">
-            <div class="brand-wrapper">
-                <span class="logo-icon">🏛️</span>
+            <!-- <div class="brand-wrapper">
                 <span style="font-weight: 700; color: var(--primary-dark)">LandPriceVN</span>
-            </div>
+            </div> -->
             <h1>Tra Cứu Giá Đất <br>Hà Nội 2026</h1>
         </header>
 
@@ -179,6 +184,7 @@
                 const get = (k) => item[k] || '';
                 const formatPop = (v) => v ? `<span class="price-highlight">${v}</span>` : '-';
                 
+                // Correct keys based on CSV header combination
                 const fromP = item['Đoạn đường - Từ'] || item['Từ'] || '---';
                 const toP = item['Đoạn đường - Đến'] || item['Đến'] || '---';
 
@@ -194,11 +200,11 @@
 
                     <div class="route-info">
                         <div class="route-point">
-                            <span class="point-label"><i class="fa-solid fa-location-dot"></i> Điểm Đầu</span>
+                            <span class="point-label"><i class="fa-solid fa-location-dot"></i> Từ</span>
                             <div class="point-value">${fromP}</div>
                         </div>
                         <div class="route-point">
-                            <span class="point-label"><i class="fa-solid fa-location-crosshairs"></i> Điểm Cuối</span>
+                            <span class="point-label"><i class="fa-solid fa-location-crosshairs"></i> Đến</span>
                             <div class="point-value">${toP}</div>
                         </div>
                     </div>

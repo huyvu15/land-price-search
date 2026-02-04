@@ -1,0 +1,158 @@
+/* --- Shared & Premium Styles --- */
+:root {
+    --primary-color: #3b82f6;
+    --primary-dark: #2563eb;
+    --text-main: #1e293b;
+    --text-secondary: #64748b;
+    --bg-page: #f8fafc;
+}
+
+body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.8;
+    margin: 0;
+    padding: 0;
+}
+
+.doc-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 60px 80px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-radius: 2px; /* Looks like paper */
+    position: relative;
+}
+
+/* Header & Titles */
+.doc-header {
+    text-align: center;
+    margin-bottom: 50px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 30px;
+}
+
+.doc-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.doc-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Content Typography */
+h2 {
+    font-size: 1.35rem;
+    color: var(--primary-dark);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 16px;
+    background: #eff6ff;
+    padding: 10px 16px;
+    border-radius: 0 8px 8px 0;
+}
+
+h3 {
+    font-size: 1.15rem;
+    color: #334155;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+p { margin-bottom: 16px; text-align: justify; }
+
+ul, ol {
+    margin-bottom: 20px;
+    padding-left: 24px;
+}
+
+li {
+    margin-bottom: 10px;
+    color: #334155;
+}
+
+strong { color: #0f172a; font-weight: 600; }
+
+/* Contact Specific */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.contact-card {
+    background: #f8fafc;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.2s;
+    border: 1px solid #e2e8f0;
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    background: #fff;
+    border-color: var(--primary-color);
+}
+
+.contact-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 16px;
+}
+
+.contact-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.contact-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Utils */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 30px;
+    transition: color 0.2s;
+}
+
+.back-btn:hover { color: var(--primary-color); }
+
+.signature-section {
+    margin-top: 60px;
+    text-align: right;
+    padding-right: 40px;
+}
+
+.signature-role { font-weight: 700; text-transform: uppercase; font-size: 0.95rem; }
+.signature-name { margin-top: 80px; font-weight: 700; font-size: 1.1rem; }
+
+@media (max-width: 600px) {
+    .doc-container { padding: 30px 20px; margin: 20px; }
+    .doc-title { font-size: 1.4rem; }
+}
