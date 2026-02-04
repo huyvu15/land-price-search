@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra Cứu Giá Đất Hà Nội 2026</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="project.css">
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand-wrapper">
+                <span class="logo-icon">🏛️</span>
+                <span style="font-weight: 700; color: var(--primary-dark)">LandPriceVN</span>
+            </div>
+            <h1>Tra Cứu Giá Đất <br>Hà Nội 2026</h1>
+            <!-- <p class="subtitle">Ứng dụng tra cứu bảng giá đất chính thức mới nhất. Dữ liệu chính xác, cập nhật liên tục từ cơ quan nhà nước.</p> -->
+        </header>
+
+        <!-- Search -->
+        <section class="search-section">
+            <form id="searchForm" class="search-card">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="streetInput" placeholder="Nhập tên đường, phố (ví dụ: Trần Hưng Đạo)..." required autocomplete="off">
+                </div>
+                <button type="submit" id="searchBtn">
+                     Tra Cứu Ngay
+                </button>
+            </form>
+        </section>
+
+        <!-- Loading & Status -->
+        <section id="statusSection" class="status-section hidden">
+            <div class="loader-animation"></div>
+            <p style="font-weight: 500; color: var(--text-secondary)">Đang đồng bộ dữ liệu...</p>
+        </section>
+
+        <!-- Results -->
+        <section id="resultsSection" class="results-section hidden">
+            <!-- Content injected via JS -->
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 HANOI LAND PRICE LOOKUP. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Use the deployed Web App URL
+        const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz35xFNhzZvsYuxxpsxQKveGWNaifMJTCgwF7tS4is1AmU4WnLGC_JjYR3x05Qw1ier/exec';
+
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('streetInput');
+        const resultsSection = document.getElementById('resultsSection');
+        const statusSection = document.getElementById('statusSection');
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            // Reset UI
+            resultsSection.innerHTML = '';
+            resultsSection.classList.add('hidden');
+            statusSection.classList.remove('hidden');
+
+            try {
+                // Fetch Data
+                // Note: Apps Script redirect handling is automatic in standard fetch 
+                const response = await fetch(`${APPSCRIPT_URL}?ten_duong=${encodeURIComponent(query)}`);
+                
+                if (!response.ok) {
+                    throw new Error('Không thể kết nối đến máy chủ dữ liệu (Code 400/500)');
+                }
+                
+                const data = await response.json();
+                renderResults(data, query);
+
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                resultsSection.innerHTML = `
+                    <div class="error-msg">
+                        <h3><i class="fa-solid fa-triangle-exclamation"></i> Lỗi Kết Nối</h3>
+                        <p>Không thể lấy dữ liệu lúc này. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.</p>
+                        <p style="font-size:0.8rem; margin-top:8px">${error.message}</p>
+                    </div>
+                `;
+                resultsSection.classList.remove('hidden');
+            } finally {
+                statusSection.classList.add('hidden');
+            }
+        });
+
+        function renderResults(data, query) {
+            resultsSection.classList.remove('hidden');
+
+            if (!data || data.length === 0) {
+                resultsSection.innerHTML = `
+                    <div class="status-section">
+                        <i class="fa-solid fa-inbox" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 16px;"></i>
+                        <p style="font-size: 1.1rem; color: #64748b;">Không tìm thấy kết quả nào cho "<strong>${query}</strong>"</p>
+                        <p style="font-size: 0.9rem; color: #94a3b8;">Hãy thử nhập tên đường ngắn hơn hoặc kiểm tra chính tả.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Header info
+            let html = `
+                <div class="results-header">
+                    <div class="results-count">Tìm thấy <span>${data.length}</span> kết quả</div>
+                    <div style="font-size: 0.9rem; color: #64748b;"><i class="fa-regular fa-clock"></i> Cập nhật mới nhất</div>
+                </div>
+                <div class="results-grid">
+            `;
+
+            // Card Builder
+            html += data.map(item => {
+                const get = (k) => item[k] || '';
+                
+                // Helper to format currency/numbers if needed, but data seems pre-formatted with commas
+                const formatPop = (v) => v ? `<span class="price-highlight">${v}</span>` : '-';
+
+                return `
+                <div class="land-card">
+                    <div class="card-top">
+                        <div class="street-title">
+                            <i class="fa-solid fa-road" style="color: var(--secondary-color)"></i>
+                            ${get('Tên đường phố') || 'Không tên'}
+                        </div>
+                        <span class="location-tag">${get('Địa danh hành chính') || 'Hà Nội'}</span>
+                    </div>
+
+                    <div class="route-info">
+                        <div class="route-point">
+                            <span class="point-label"><i class="fa-solid fa-location-dot"></i> Điểm Đầu</span>
+                            <div class="point-value">${get('Từ') || '---'}</div>
+                        </div>
+                        <div class="route-point">
+                            <span class="point-label"><i class="fa-solid fa-location-crosshairs"></i> Điểm Cuối</span>
+                            <div class="point-value">${get('Đến') || '---'}</div>
+                        </div>
+                    </div>
+
+                    <div class="price-table-wrapper">
+                        <table class="price-table">
+                            <thead>
+                                <tr>
+                                    <th>Loại Đất</th>
+                                    <th>Vị Trí 1</th>
+                                    <th>Vị Trí 2</th>
+                                    <th>Vị Trí 3</th>
+                                    <th>Vị Trí 4</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Đất Ở</td>
+                                    <td>${formatPop(get('Giá đất ở - VT1'))}</td>
+                                    <td>${formatPop(get('Giá đất ở - VT2'))}</td>
+                                    <td>${formatPop(get('Giá đất ở - VT3'))}</td>
+                                    <td>${formatPop(get('Giá đất ở - VT4'))}</td>
+                                </tr>
+                                <tr>
+                                    <td>TM-DV</td>
+                                    <td>${formatPop(get('Giá đất thương mại, dịch vụ - VT1'))}</td>
+                                    <td>${formatPop(get('Giá đất thương mại, dịch vụ - VT2'))}</td>
+                                    <td>${formatPop(get('Giá đất thương mại, dịch vụ - VT3'))}</td>
+                                    <td>${formatPop(get('Giá đất thương mại, dịch vụ - VT4'))}</td>
+                                </tr>
+                                <tr>
+                                    <td>SX-KD</td>
+                                    <td>${formatPop(get('Giá đất sản xuất kinh doanh phi nông nghiệp không phải là đất thương mại dịch vụ - VT1'))}</td>
+                                    <td>${formatPop(get('Giá đất sản xuất kinh doanh phi nông nghiệp không phải là đất thương mại dịch vụ - VT2'))}</td>
+                                    <td colspan="2" style="text-align:center; color: #cbd5e1">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            html += '</div>';
+            resultsSection.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
